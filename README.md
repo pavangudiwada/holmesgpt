@@ -291,6 +291,11 @@ HolmesGPT can investigate many issues out of the box, with no customization or t
    - If using Robusta SaaS: See [Robusta's docs](https://docs.robusta.dev/master/configuration/holmesgpt/custom_toolsets.html)
    - If using the CLI: Use `-t` flag with [custom toolset files](./examples/custom_toolset.yaml) or add to `~/.holmes/config.yaml`
 
+**MCP Servers** Give HolmesGPT access to remote SSE MCP servers:
+   - If using Robusta SaaS: See [Robusta's docs](https://docs.robusta.dev/master/configuration/holmesgpt/remote_mcp_servers.html)
+   - If using the CLI: Use `-t` flag with [custom toolset files](./examples/custom_toolset.yaml) or add to `~/.holmes/config.yaml`
+
+
 **Custom Runbooks**: Give HolmesGPT instructions for known alerts:
    - If using Robusta SaaS: Use the Robusta UI to add runbooks
    - If using the CLI: Use `-r` flag with [custom runbook files](./examples/custom_runbooks.yaml) or add to `~/.holmes/config.yaml`
