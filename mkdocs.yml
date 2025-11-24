@@ -8,6 +8,7 @@ exclude_docs: |
   _*
   snippets/
   README.md
+  cncf-self-assesment.md
 
 theme:
   name: material
