@@ -135,7 +135,9 @@ class Config(RobustaBaseConfig):
                 f"Loaded models: {list(self.llm_model_registry.models.keys())}"
             )
         else:
-            raise Exception("Could not load any configured LLM models")
+            raise Exception(
+                "Could not load any configured LLM models. Please check your API keys and model configuration. \n See https://holmesgpt.dev/ai-providers/ for setup instructions."
+            )
 
     @classmethod
     def load_from_file(cls, config_file: Optional[Path], **kwargs) -> "Config":

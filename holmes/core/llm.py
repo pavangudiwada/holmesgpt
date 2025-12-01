@@ -641,7 +641,9 @@ class LLMModelRegistry:
     def get_model_params(self, model_key: Optional[str] = None) -> ModelEntry:
         with self._lock:
             if not self._llms:
-                raise Exception("Could not load any configured LLM models")
+                raise Exception(
+                    "Could not load any configured LLM models. Please check your API keys and model configuration. \n See https://holmesgpt.dev/ai-providers/ for setup instructions."
+                )
 
             if model_key:
                 model_params = self._llms.get(model_key)
