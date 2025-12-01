@@ -641,7 +641,7 @@ class LLMModelRegistry:
     def get_model_params(self, model_key: Optional[str] = None) -> ModelEntry:
         with self._lock:
             if not self._llms:
-                raise Exception("No llm models were loaded")
+                raise Exception("Could not load any configured LLM models")
 
             if model_key:
                 model_params = self._llms.get(model_key)
