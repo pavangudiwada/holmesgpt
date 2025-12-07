@@ -484,14 +484,11 @@ class ToolCallingLLM:
                         tool_call_result.result.status
                         == StructuredToolResultStatus.APPROVAL_REQUIRED
                     ):
-                        with trace_span.start_span(type="tool") as tool_span:
-                            tool_call_result = self._handle_tool_call_approval(
-                                tool_call_result=tool_call_result,
-                                tool_number=tool_number,
-                            )
-                            ToolCallingLLM._log_tool_call_result(
-                                tool_span, tool_call_result
-                            )
+                        tool_call_result = self._handle_tool_call_approval(
+                            tool_call_result=tool_call_result,
+                            tool_number=tool_number,
+                            trace_span=trace_span,
+                        )
 
                     tool_result_response_dict = (
                         tool_call_result.as_tool_result_response()
@@ -515,6 +512,7 @@ class ToolCallingLLM:
         tool_name: str,
         tool_params: dict,
         user_approved: bool,
+        tool_call_id: str,
         tool_number: Optional[int] = None,
     ) -> StructuredToolResult:
         tool = self.tool_executor.get_tool_by_name(tool_name)
@@ -534,6 +532,8 @@ class ToolCallingLLM:
                 user_approved=user_approved,
                 llm=self.llm,
                 max_token_count=self.llm.get_max_token_count_for_single_tool(),
+                tool_name=tool_name,
+                tool_call_id=tool_call_id,
             )
             tool_response = tool.invoke(tool_params, context=invoke_context)
         except Exception as e:
@@ -578,6 +578,7 @@ class ToolCallingLLM:
                 tool_params=tool_params,
                 user_approved=user_approved,
                 tool_number=tool_number,
+                tool_call_id=tool_call_id,
             )
 
         if not isinstance(tool_response, StructuredToolResult):
@@ -603,9 +604,19 @@ class ToolCallingLLM:
         )
 
     @staticmethod
-    def _log_tool_call_result(tool_span, tool_call_result: ToolCallResult):
+    def _log_tool_call_result(
+        tool_span, tool_call_result: ToolCallResult, approval_possible=True
+    ):
         tool_span.set_attributes(name=tool_call_result.tool_name)
-        if tool_call_result.result.status == StructuredToolResultStatus.ERROR:
+        status = tool_call_result.result.status
+
+        if (
+            status == StructuredToolResultStatus.APPROVAL_REQUIRED
+            and not approval_possible
+        ):
+            status = StructuredToolResultStatus.ERROR
+
+        if status == StructuredToolResultStatus.ERROR:
             error = (
                 tool_call_result.result.error
                 if tool_call_result.result.error
@@ -618,7 +629,7 @@ class ToolCallingLLM:
             output=tool_call_result.result.data,
             error=error,
             metadata={
-                "status": tool_call_result.result.status,
+                "status": status,
                 "description": tool_call_result.description,
                 "return_code": tool_call_result.result.return_code,
                 "error": tool_call_result.result.error,
@@ -671,13 +682,16 @@ class ToolCallingLLM:
                 tool_call_result=tool_call_result, llm=self.llm
             )
 
-            ToolCallingLLM._log_tool_call_result(tool_span, tool_call_result)
+            ToolCallingLLM._log_tool_call_result(
+                tool_span, tool_call_result, self.approval_callback is not None
+            )
             return tool_call_result
 
     def _handle_tool_call_approval(
         self,
         tool_call_result: ToolCallResult,
         tool_number: Optional[int],
+        trace_span: Any,
     ) -> ToolCallResult:
         """
         Handle approval for a single tool call if required.
@@ -696,26 +710,33 @@ class ToolCallingLLM:
             return tool_call_result
 
         # Get approval from user
-        approved, feedback = self.approval_callback(tool_call_result.result)
+        with trace_span.start_span(
+            type="task", name=f"Ask approval for {tool_call_result.tool_name}"
+        ):
+            approved, feedback = self.approval_callback(tool_call_result.result)
 
-        if approved:
-            logging.debug(
-                f"User approved command: {tool_call_result.result.invocation}"
-            )
-            new_response = self._directly_invoke_tool_call(
-                tool_name=tool_call_result.tool_name,
-                tool_params=tool_call_result.result.params or {},
-                user_approved=True,
-                tool_number=tool_number,
-            )
-            tool_call_result.result = new_response
-        else:
-            # User denied - update to error
-            feedback_text = f" User feedback: {feedback}" if feedback else ""
-            tool_call_result.result.status = StructuredToolResultStatus.ERROR
-            tool_call_result.result.error = (
-                f"User denied command execution.{feedback_text}"
-            )
+        # Note - Tool calls are currently logged twice, once when returning APPROVAL_REQUIRED and once here
+        with trace_span.start_span(type="tool") as tool_span:
+            if approved:
+                logging.debug(
+                    f"User approved command: {tool_call_result.result.invocation}"
+                )
+                new_response = self._directly_invoke_tool_call(
+                    tool_name=tool_call_result.tool_name,
+                    tool_params=tool_call_result.result.params or {},
+                    user_approved=True,
+                    tool_number=tool_number,
+                    tool_call_id=tool_call_result.tool_call_id,
+                )
+                tool_call_result.result = new_response
+            else:
+                # User denied - update to error
+                feedback_text = f" User feedback: {feedback}" if feedback else ""
+                tool_call_result.result.status = StructuredToolResultStatus.ERROR
+                tool_call_result.result.error = (
+                    f"User denied command execution.{feedback_text}"
+                )
+            ToolCallingLLM._log_tool_call_result(tool_span, tool_call_result)
 
         return tool_call_result
 
