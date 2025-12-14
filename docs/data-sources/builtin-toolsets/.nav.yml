@@ -2,13 +2,13 @@ nav:
   - index.md
   - AKS Node Health: aks-node-health.md
   - ArgoCD: argocd.md
-  - AWS (MCP): aws-mcp.md
+  - AWS (MCP): aws.md
   - Azure Kubernetes Service: aks.md
   - Azure SQL Database: azure-sql.md
   - Bash: bash.md
   - Cilium: cilium.md
   - Confluence: confluence.md
-  - Coralogix logs: coralogix-logs.md
+  - Coralogix: coralogix-logs.md
   - DataDog: datadog.md
   - Datetime: datetime.md
   - Docker: docker.md
