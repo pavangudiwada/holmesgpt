@@ -131,16 +131,6 @@ class Config(RobustaBaseConfig):
             self._llm_model_registry = LLMModelRegistry(self, dal=self.dal)
         return self._llm_model_registry
 
-    def log_useful_info(self):
-        if self.llm_model_registry.models:
-            logging.info(
-                f"Loaded models: {list(self.llm_model_registry.models.keys())}"
-            )
-        else:
-            raise Exception(
-                "Could not load any configured LLM models. Please check your API keys and model configuration. \n See https://holmesgpt.dev/ai-providers/ for setup instructions."
-            )
-
     @classmethod
     def load_from_file(cls, config_file: Optional[Path], **kwargs) -> "Config":
         """
@@ -169,7 +159,8 @@ class Config(RobustaBaseConfig):
             merged_config.update(cli_options)
             result = cls(**merged_config)
 
-        result.log_useful_info()
+        # Trigger LLM model registry initialization which includes validation
+        _ = result.llm_model_registry
         return result
 
     @classmethod
@@ -205,7 +196,8 @@ class Config(RobustaBaseConfig):
         kwargs["cluster_name"] = Config.__get_cluster_name()
         kwargs["should_try_robusta_ai"] = True
         result = cls(**kwargs)
-        result.log_useful_info()
+        # Trigger LLM model registry initialization which includes validation
+        _ = result.llm_model_registry
         return result
 
     @staticmethod
