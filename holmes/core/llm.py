@@ -544,6 +544,8 @@ class LLMModelRegistry:
         model_from_env = os.environ.get("MODEL")
         if model_from_env:
             self.config.model = model_from_env
+            if self._llms and self.config.model in self._llms:
+                return False
             return True
 
         # backward compatibility - in the past config.model was set by default to gpt-4o.

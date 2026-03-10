@@ -164,3 +164,30 @@ class TestLLMModelRegistryGetModelParams:
         assert "No LLM models were loaded" in error
         assert "--model '<provider/model>'" in error
         assert "export MODEL='<provider/model>'" in error
+
+    def test_model_env_matching_model_list_keeps_full_model_entry(
+        self, mock_config, mock_dal, monkeypatch
+    ):
+        model_key = "gemini-alias"
+        model_entry = ModelEntry(
+            model="gemini/gemini-2.0-flash",
+            name=model_key,
+            api_key=SecretStr("gemini-key"),
+            api_base="https://generativelanguage.googleapis.com",
+            custom_args={"temperature": 0.2},
+        )
+        monkeypatch.setattr(
+            "holmes.core.llm.LLMModelRegistry._parse_models_file",
+            lambda self, path: {model_key: model_entry},
+        )
+        monkeypatch.setenv("MODEL", model_key)
+
+        registry = LLMModelRegistry(mock_config, mock_dal)
+
+        loaded_entry = registry.models[model_key]
+        assert loaded_entry.model == "gemini/gemini-2.0-flash"
+        assert loaded_entry.name == model_key
+        assert loaded_entry.api_key is not None
+        assert loaded_entry.api_key.get_secret_value() == "gemini-key"
+        assert loaded_entry.api_base == "https://generativelanguage.googleapis.com"
+        assert loaded_entry.custom_args == {"temperature": 0.2}
