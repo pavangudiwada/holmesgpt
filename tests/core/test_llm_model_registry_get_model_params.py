@@ -17,6 +17,7 @@ class TestLLMModelRegistryGetModelParams:
         # LLMModelRegistry accesses these config attributes during initialization
         # (see holmes/core/llm.py lines 490-497)
         monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+        monkeypatch.delenv("MODEL", raising=False)
         config = MagicMock(spec=Config)
         config.should_try_robusta_ai = False
         config.model = None
@@ -146,3 +147,20 @@ class TestLLMModelRegistryGetModelParams:
 
         assert model_params.model == "gpt-5o"
         assert model_params.name == "gpt5"
+
+    def test_get_model_params_with_no_models_raises_helpful_error(
+        self, mock_config, mock_dal, monkeypatch
+    ):
+        monkeypatch.setattr(
+            "holmes.core.llm.LLMModelRegistry._parse_models_file",
+            lambda self, path: {},
+        )
+        registry = LLMModelRegistry(mock_config, mock_dal)
+
+        with pytest.raises(Exception) as exc:
+            registry.get_model_params()
+
+        error = str(exc.value)
+        assert "No LLM models were loaded" in error
+        assert "--model '<provider/model>'" in error
+        assert "export MODEL='<provider/model>'" in error

@@ -539,6 +539,13 @@ class LLMModelRegistry:
                 return False
             return True
 
+        # Load model from environment when config doesn't provide one.
+        # This is used by CLI flows that rely on `export MODEL=...`.
+        model_from_env = os.environ.get("MODEL")
+        if model_from_env:
+            self.config.model = model_from_env
+            return True
+
         # backward compatibility - in the past config.model was set by default to gpt-4o.
         # so we need to check if the user has set an OPENAI_API_KEY to load the config model.
         has_openai_key = os.environ.get("OPENAI_API_KEY")
@@ -618,7 +625,12 @@ class LLMModelRegistry:
     def get_model_params(self, model_key: Optional[str] = None) -> ModelEntry:
         with self._lock:
             if not self._llms:
-                raise Exception("No llm models were loaded")
+                raise Exception(
+                    "No LLM models were loaded. Configure a model using one of: "
+                    "--model '<provider/model>', export MODEL='<provider/model>', "
+                    "or MODEL_LIST_FILE_LOCATION/config model list. "
+                    "Setting only an API key (for example OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, AZURE_API_KEY) is not enough without a model."
+                )
 
             if model_key:
                 model_params = self._llms.get(model_key)
