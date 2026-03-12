@@ -102,3 +102,11 @@ def test_cli_config_get_llm_loads_model_from_MODEL_env_var(monkeypatch):
 
     assert len(cli_config.llm_model_registry._llms) == 1
     assert cli_config.get_models_list() == [test_model]
+
+
+def test_cli_config_ignores_blank_MODEL_env_var(monkeypatch):
+    monkeypatch.setattr("holmes.core.llm.MODEL_LIST_FILE_LOCATION", "")
+    monkeypatch.setenv("MODEL", "   ")
+    cli_config = get_cli_config()
+
+    assert cli_config.model is None

@@ -183,6 +183,7 @@ class TestLLMModelRegistryGetModelParams:
             lambda self, path: {model_key: model_entry},
         )
         monkeypatch.setenv("MODEL", model_key)
+        mock_config.model = model_key
 
         registry = LLMModelRegistry(mock_config, mock_dal)
 
