@@ -574,15 +574,6 @@ class LLMModelRegistry:
                 return False
             return True
 
-        # Load model from environment when config doesn't provide one.
-        # This is used by CLI flows that rely on `export MODEL=...`.
-        model_from_env = os.environ.get("MODEL")
-        if model_from_env:
-            self.config.model = model_from_env
-            if self._llms and self.config.model in self._llms:
-                return False
-            return True
-
         # backward compatibility - in the past config.model was set by default to gpt-4o.
         # so we need to check if the user has set an OPENAI_API_KEY to load the config model.
         has_openai_key = os.environ.get("OPENAI_API_KEY")

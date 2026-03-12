@@ -164,6 +164,8 @@ class TestLLMModelRegistryGetModelParams:
         assert "No LLM models were loaded" in error
         assert "--model '<provider/model>'" in error
         assert "export MODEL='<provider/model>'" in error
+        assert "MODEL_LIST_FILE_LOCATION/config model list" in error
+        assert "is not enough without a model" in error
 
     def test_model_env_matching_model_list_keeps_full_model_entry(
         self, mock_config, mock_dal, monkeypatch

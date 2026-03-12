@@ -94,6 +94,7 @@ def test_cli_config_get_llm_loads_model_from_MODEL_env_var(monkeypatch):
     monkeypatch.setenv("AWS_ACCESS_KEY_ID", "access_key_id")
     monkeypatch.setenv("AWS_SECRET_ACCESS_KEY", "secret_access_key")
     cli_config = get_cli_config()
+    assert cli_config.model == test_model
     llm: DefaultLLM = cli_config._get_llm()
     assert llm.name == test_model
     assert llm.model == test_model
