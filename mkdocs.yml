@@ -22,6 +22,7 @@ nav:
           - "HTTP Server (Docker)": installation/docker-compose-installation.md
           - "Helm Chart": installation/kubernetes-installation.md
           - "Python SDK": installation/python-installation.md
+          - "Microsoft Teams Bot (3rd party)": installation/teams-installation.md
     - Walkthrough:
           - "Overview": walkthrough/index.md
           - "Interactive Mode": walkthrough/interactive-mode.md
@@ -32,6 +33,8 @@ nav:
           - "Overview & Installation": operator/index.md
           - "Health Checks": operator/health-checks.md
           - "Scheduled Health Checks": operator/scheduled-health-checks.md
+          - "Deployment Verification": operator/deployment-verification.md
+          - "Alert Destinations": operator/destinations.md
           - "Configuration": operator/configuration.md
           - "Development Guide": operator/development.md
     - "AI Providers":
@@ -41,6 +44,7 @@ nav:
           - "Azure OpenAI": ai-providers/azure-openai.md
           - Gemini: ai-providers/gemini.md
           - "Google Vertex AI": ai-providers/google-vertex-ai.md
+          - "GitHub Models": ai-providers/github.md
           - Ollama: ai-providers/ollama.md
           - OpenRouter: ai-providers/openrouter.md
           - OpenAI: ai-providers/openai.md
@@ -118,6 +122,7 @@ nav:
                 - "October 12, 2025": development/evaluations/history/results_20251012_170303.md
                 - "Self-Hosted Models v1": development/evaluations/history/custom_self_hosted_results_20251008_053744.md
                 - "November 27, 2025": development/evaluations/history/results_20251127_042958.md
+                - "March 15, 2026": development/evaluations/history/results_20260315_041151.md
           - "Running Evaluations": development/evaluations/running-evals.md
           - "Adding New Evaluations": development/evaluations/adding-evals.md
           - "Benchmarking New Models": development/evaluations/benchmarking-new-models.md
@@ -133,6 +138,7 @@ nav:
           - "HTTP API": reference/http-api.md
           - "Runbooks": reference/runbooks.md
           - "Slash Commands": reference/slash-commands.md
+          - "Context Management": reference/context-management.md
           - "Troubleshooting": reference/troubleshooting.md
     - Community: community.md
 

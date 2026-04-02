@@ -58,9 +58,9 @@ For complete setup instructions with `modelList` configuration, see the [Kuberne
 | stream                  | No       | false   | boolean   | Enable streaming response (SSE)                 |
 | enable_tool_approval    | No       | false   | boolean   | Require approval for certain tool executions (see [Tool Approval Behavior](#tool-approval-behavior))    |
 | additional_system_prompt| No       |         | string    | Additional instructions appended to system prompt|
-| behavior_controls       | No       |         | object    | Override prompt sections to enable/disable them (see [Fast Mode & Prompt Controls](#fast-mode--prompt-controls)) |
+| behavior_controls       | No       |         | object    | Override prompt sections to enable/disable them (see [Fast Mode and Prompt Controls](#fast-mode-and-prompt-controls)) |
 
-#### Fast Mode & Prompt Controls
+#### Fast Mode and Prompt Controls
 
 The `behavior_controls` field lets you selectively enable or disable sections of the system and user prompts. This is the API equivalent of the CLI's `--fast-mode` flag and gives you fine-grained control over which prompt components HolmesGPT includes.
 

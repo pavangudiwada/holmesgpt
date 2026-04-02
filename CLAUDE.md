@@ -545,7 +545,7 @@ When asked about content from the HolmesGPT documentation website (https://holme
 
 ## MkDocs Navigation
 
-The docs site uses the `awesome-nav` plugin. Navigation is controlled by `.nav.yml` files in each `docs/` subdirectory, **not** by the `nav:` section in `mkdocs.yml`. When adding a new docs page, you must add it to the `.nav.yml` file in the corresponding directory (e.g., `docs/reference/.nav.yml` for reference pages).
+The docs site uses the `awesome-nav` plugin, but navigation is controlled by the `nav:` section in `mkdocs.yml`. When adding a new docs page, you must add it to the appropriate section in `mkdocs.yml`.
 
 ## MkDocs Formatting Notes
 
