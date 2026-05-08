@@ -13,13 +13,13 @@ Skills folder contains operational skills for the HolmesGPT project. Skills prov
 ### Structured Skill
 
 Structured skills are designed for specific issues when conditions like issue name, id or source match, the corresponding instructions will be returned for investigation.
-For example, the investigation in [kube-prometheus-stack.yaml](kube-prometheus-stack.yaml) will be returned when the issue to be investigated match either KubeSchedulerDown or KubeControllerManagerDown.
+For example, a skill such as `kube-scheduler-down/SKILL.md` will be returned when the issue to be investigated matches either KubeSchedulerDown or KubeControllerManagerDown.
 This skill is mainly used for `holmes investigate`
 
 ### Skills Directory
 
 Each skill is a directory containing a `SKILL.md` file with YAML frontmatter (name, description) and markdown body (the instructions).
-Skills are placed under `holmes/plugins/skills/builtin/` for builtin skills, or in any directory configured via `custom_skill_paths`.
+Skills can live in any directory configured via `custom_skill_paths`.
 During runtime, the LLM will compare the skill description with the user question and fetch the most matched skill for investigation. It's possible no skill is fetched for no match.
 
 ## Generating Skills

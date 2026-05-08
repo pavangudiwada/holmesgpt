@@ -40,7 +40,7 @@ Your task is to generate a strictly executable skill for AI Agent to follow. The
 # File Organization Guidelines
 
 ## Folder Structure
-*Each skill is a directory containing a `SKILL.md` file. Skills are placed under `holmes/plugins/skills/builtin/` for builtin skills. Create a new skill directory if your skill doesn't fit into existing ones.*
+*Each skill is a directory containing a `SKILL.md` file. Create a new skill directory with a descriptive name when adding a skill.*
 
 ## Directory Naming
 *Use consistent naming conventions for skill directories:*
@@ -52,7 +52,7 @@ Your task is to generate a strictly executable skill for AI Agent to follow. The
 ### Creating a New Skill
 Each skill is a directory with a `SKILL.md` file containing YAML frontmatter and markdown body:
 
-1. **Create a directory** under `holmes/plugins/skills/builtin/` with a descriptive name
+1. **Create a directory** with a descriptive name
 2. **Create a `SKILL.md` file** inside it with this structure:
    ```markdown
    ---
@@ -74,7 +74,6 @@ Each skill is a directory with a `SKILL.md` file containing YAML frontmatter and
 - `description` (required): Used by the LLM to match the skill to user issues. Be specific.
 Example:
 ```
-holmes/plugins/skills/builtin/
-  dns-resolution-troubleshooting/
-    SKILL.md
+dns-resolution-troubleshooting/
+  SKILL.md
 ```

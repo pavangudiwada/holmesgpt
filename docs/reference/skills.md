@@ -16,10 +16,6 @@ Skills work with all Holmes interfaces — the CLI (`ask` and `investigate` comm
 4. Holmes follows the skill steps, calling tools to gather data at each step
 5. Holmes reports findings with a checklist showing completed and skipped steps
 
-## Built-in Skills
-
-Holmes ships with built-in skills at `holmes/plugins/skills/builtin/`. These are available automatically — no configuration needed.
-
 ## Custom Skills
 
 You can add your own skills by creating SKILL.md files and pointing Holmes to them.
@@ -124,7 +120,7 @@ The key sections in a skill's markdown body are:
     catalog = config.get_skill_catalog()
     ```
 
-Holmes scans each directory (up to 2 levels deep) for `SKILL.md` files. Multiple paths are merged — skills from all paths are combined with built-in skills.
+Holmes scans each directory (up to 2 levels deep) for `SKILL.md` files. Multiple paths are merged into a single skill catalog.
 
 ## Common Use Cases
 
