@@ -117,11 +117,11 @@ Read the [LLM Providers documentation](https://holmesgpt.dev/ai-providers/) to l
 
 ## Using HolmesGPT
 
-See the [walkthrough documentation](https://holmesgpt.dev/walkthrough/) for usage guides, including:
+See the [walkthrough documentation](https://holmesgpt.dev/latest/walkthrough/) for usage guides, including:
 
-- [Interactive mode](https://holmesgpt.dev/walkthrough/interactive-mode/) for asking questions and follow-ups
-- [Investigating Prometheus alerts](https://holmesgpt.dev/walkthrough/investigating-prometheus-alerts/)
-- [CI/CD troubleshooting](https://holmesgpt.dev/walkthrough/cicd-troubleshooting/)
+- [Interactive mode](https://holmesgpt.dev/latest/walkthrough/interactive-mode/) for asking questions and follow-ups
+- [Investigating Prometheus alerts](https://holmesgpt.dev/latest/walkthrough/investigating-prometheus-alerts/)
+- [CI/CD troubleshooting](https://holmesgpt.dev/latest/walkthrough/cicd-troubleshooting/)
 
 ## 🔐 Data Privacy
 
